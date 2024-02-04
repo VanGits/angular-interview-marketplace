@@ -67,7 +67,7 @@ app.post('/login', async (req, res) => {
 // ------------ AUTH  ------------
 
 // Fetch all interviews
-app.get('/interviews', async (req, res) => {
+app.get('/interviews', async (res) => {
  try {
     const interviewsRef = ref(db, 'interviews');
     const snapshot = await get(interviewsRef);
