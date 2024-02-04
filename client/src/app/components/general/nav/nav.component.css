@@ -1,40 +1,41 @@
-
-nav{
+nav {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid rgb(221, 221, 221);
-    
+
 }
-nav i{
+
+nav i {
     color: var(--primary-color);
     font-size: 18px;
-   
-  
+
+
 }
 
-.nav-container{
-    
-        max-width: 1500px;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 70px;
+.nav-container {
 
-    
+    max-width: 1500px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+
+
 }
 
 
 
-.nav-left-side{
+.nav-left-side {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
-nav h1{
+nav h1 {
     font-family: 'Lato';
     letter-spacing: 2.4px;
     font-weight: 800;
@@ -43,15 +44,8 @@ nav h1{
     color: var(--dark-color);
 }
 
-p-button{
+p-button {
     margin: 0 8px;
-    
-    
+
+
 }
-
-
-
-
-
-
-

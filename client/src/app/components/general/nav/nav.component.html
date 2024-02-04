@@ -2,13 +2,13 @@
 
 <nav>
     <div class="nav-container">
-        <div class="nav-left-side">
+        <div class="nav-left-side" routerLink="/">
             <i class="pi pi-pencil"></i>
             <h1>Interviews</h1>
         </div>
         <div class="nav-right-side">
-            <p-button styleClass="nav-button" label="Log In"></p-button>
-            <p-button styleClass="nav-button" label="Sign Up" [outlined]="true"></p-button>
+            <p-button styleClass="nav-button" label="Log In" routerLink="/login"></p-button>
+            <p-button styleClass="nav-button" label="Sign Up" [outlined]="true" routerLink="/signup"></p-button>
         </div>
     </div>
 </nav>

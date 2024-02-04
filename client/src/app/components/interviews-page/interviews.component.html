@@ -1,11 +1,14 @@
 <main>
     <div class="interviews">
         <p-card  *ngFor="let interview of data" class="interview" [header]="interview.title" [subheader]="'$' + (interview.price | number:'1.2-2')" [style]="{ width: '360px' }">
+            <ng-template pTemplate="header">
+                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
+            </ng-template>
             <p>{{ (interview.description?.length > 100) ? (interview.description | slice:0:100) + '...' : interview.description }}</p>
             <h4>Created by {{ interview.author }} </h4>
             <ng-template pTemplate="footer">
-                <p-button label="Preview" icon="pi pi-check"></p-button>
-                <p-button label="Purchase" icon="pi pi-credit-card" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em', background: '#5dad4f', border:'none' }"></p-button>
+                <p-button label="Preview" icon="pi pi-check" [outlined]="true"></p-button>
+                <p-button label="Purchase" icon="pi pi-credit-card"  [outlined]="true" styleClass="p-button" [style]="{ 'margin-left': '.5em', 'border-color': '#5dad4f', 'color':'#5dad4f' }"></p-button>
             </ng-template>
         </p-card>
         

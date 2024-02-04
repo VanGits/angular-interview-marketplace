@@ -1,0 +1,43 @@
+
+
+section{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    
+   
+    
+    
+}
+section h3{
+    color: var(--dark-color);
+}
+.login-right-side img{
+    
+    width: 100%;
+    object-fit: cover;
+  
+
+}
+.login-left-side{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.login-left-side,
+.login-right-side {
+  flex: 1; 
+
+ 
+ 
+}
+
+.login-input{
+    width: 300px;
+}

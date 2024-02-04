@@ -1,1 +1,24 @@
-<p>login works!</p>
+<section>
+    <div class="login-left-side">
+        <div class="login-content">
+            <h3>Email</h3>
+            <span class="p-float-label">
+
+                <input pInputText type="text" placeholder="Email" class="login-input" [(ngModel)]="email" />
+            </span>
+            <h3>Password</h3>
+            <span class="p-float-label">
+
+                <input pInputText type="password" placeholder="Password" class="login-input" [(ngModel)]="password" />
+            </span>
+            <p-button styleClass="nav-button" label="Sign In" [style]="{'margin-top': '2em'}"></p-button>
+            <p-button label="Don't have an account?" [link]="true" routerLink="/signup"></p-button>
+        </div>
+
+
+    </div>
+    <div class="login-right-side">
+        <img src="../../../assets/login-banner.jpg" alt="banner">
+    </div>
+
+</section>

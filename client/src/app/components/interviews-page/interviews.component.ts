@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 
 
+
 @Component({
   selector: 'app-interviews',
   standalone: true,
