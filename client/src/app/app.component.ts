@@ -9,9 +9,8 @@ import { NavComponent } from './components/general/nav/nav.component';
   imports: [RouterOutlet, NavComponent],
   template:`
   <app-nav></app-nav>
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>`,
+  <router-outlet></router-outlet>
+    `,
   styleUrl: './app.component.css'
 })
 export class AppComponent {

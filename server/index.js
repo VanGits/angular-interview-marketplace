@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { initializeApp } = require("firebase/app")
 const { getDatabase, ref, push, set, child, get  } = require("firebase/database");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
@@ -11,6 +12,7 @@ const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = 
 // });
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 const firebaseConfig = {
@@ -93,20 +95,20 @@ app.get('/interviews', async (req, res) => {
 // Create a new interview
 app.post('/interviews', async (req, res) => {
   try {
-      const { userId, title, author, price, questions } = req.body;
+      const { userId, title, author, price, questions, description } = req.body;
 
       // Save interview under user's interviews
       const newInterviewRef = push(child(ref(db), `users/${userId}/interviews`));
-      set(newInterviewRef, { title, author, price, questions })
+      set(newInterviewRef, { id: newInterviewRef.key, title, author, price, questions, description })
 
       // Save interview in overall interviews array
       const newOverallInterviewRef = push(child(ref(db), '/interviews'));
-      set(newOverallInterviewRef, { title, author, price, questions });
+      set(newOverallInterviewRef, { id: newOverallInterviewRef.key, title, author, price, questions, description });
 
       res.status(201).json({ message: 'Interview created successfully' });
   } catch (error) {
       console.error(error);
-      res.status(500).json({ error: error });
+      res.status(500).json({ error: "Not Authorized" });
   }
  });
 
