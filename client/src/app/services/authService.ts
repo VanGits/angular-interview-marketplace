@@ -17,8 +17,9 @@ export class AuthService {
     }
 
     login(sessionToken: string): void {
-      this.isAuthenticatedSubject.next(true);
       this.fetchUserInfo();
+      this.isAuthenticatedSubject.next(true);
+      
   
     }
     
@@ -26,7 +27,7 @@ export class AuthService {
 
    logout(): void {
 
-      sessionStorage.removeItem('sessionToken');
+      sessionStorage.removeItem('userInfo');
       this.isAuthenticatedSubject.next(false);
    }
 

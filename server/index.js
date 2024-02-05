@@ -61,8 +61,14 @@ app.use(async (req, res, next) => {
 app.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+   
+    const userRef = ref(db, `users/${user.uid}`);
+    await set(userRef, { email: user.email, balance: 0 });
+
     res.status(201).json({ uid: user.uid, email: user.email });
   } catch (error) {
     console.error(error);
@@ -93,34 +99,46 @@ app.get('/user-info', async (req, res) => {
     if (req.user) {
       const userId = req.user.uid;
 
-      
-      const userInterviewsRef = ref(db, `users/${userId}/interviews`);
-      const userInterviewsSnapshot = await get(userInterviewsRef);
+     
+      const userRef = ref(db, `users/${userId}`);
+      const userSnapshot = await get(userRef);
 
-      if (userInterviewsSnapshot.exists()) {
-      
-        let userInterviews = [];
-        userInterviewsSnapshot.forEach((childSnapshot) => {
-          userInterviews.push(childSnapshot.val());
-        });
+      if (userSnapshot.exists()) {
+        const userBalance = userSnapshot.val().balance;
 
-      
-        const userInfo = {
-          uid: req.user.uid,
-          email: req.user.email,
-          interviews: userInterviews,
-        };
+       
+        const userInterviewsRef = ref(db, `users/${userId}/interviews`);
+        const userInterviewsSnapshot = await get(userInterviewsRef);
 
-        res.status(200).json(userInfo);
+        if (userInterviewsSnapshot.exists()) {
+          let userInterviews = [];
+          userInterviewsSnapshot.forEach((childSnapshot) => {
+            userInterviews.push(childSnapshot.val());
+          });
+
+         
+          const userInfo = {
+            uid: req.user.uid,
+            email: req.user.email,
+            balance: userBalance,
+            interviews: userInterviews,
+          };
+
+          res.status(200).json(userInfo);
+        } else {
+         
+          const userInfo = {
+            uid: req.user.uid,
+            email: req.user.email,
+            balance: userBalance,
+            interviews: [],
+          };
+
+          res.status(200).json(userInfo);
+        }
       } else {
-        // If no interviews found, still return user information
-        const userInfo = {
-          uid: req.user.uid,
-          email: req.user.email,
-          interviews: [],
-        };
-
-        res.status(200).json(userInfo);
+       
+        res.status(404).json({ error: 'User not found' });
       }
     } else {
       res.status(401).json({ error: 'User not authenticated' });
@@ -130,6 +148,7 @@ app.get('/user-info', async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
 
 
 // Fetch all interviews

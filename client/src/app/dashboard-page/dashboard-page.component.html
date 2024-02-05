@@ -1,0 +1,31 @@
+<section>
+    <div class="dashboard-content">
+        <p-button [style]="{'margin-top': '2em'}"><i class="pi pi-plus" style="font-size: 1rem"></i>Create New Interview</p-button>
+        <div class="dashboard-charts">
+            <div class="chart-container">
+                <p-card header="Balance">
+                    <p-chart type="bar" [data]="data" [options]="options"></p-chart>
+                </p-card>
+            </div>
+            <div class="chart-container">
+                <p-card header="Created Interviews">
+                    <p-chart type="line" [data]="data" [options]="options"></p-chart>
+                </p-card>
+
+
+            </div>
+            <div class="chart-container circle">
+                <p-card header="Purchased Interviews">
+                    <p-chart type="polarArea" [data]="data" [options]="options"></p-chart>
+                </p-card>
+
+                
+            </div>
+            
+
+        </div>
+       
+
+    </div>
+
+</section>

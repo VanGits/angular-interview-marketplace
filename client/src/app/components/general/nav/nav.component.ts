@@ -3,7 +3,6 @@ import { ButtonModule } from 'primeng/button';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/authService';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 
 
 

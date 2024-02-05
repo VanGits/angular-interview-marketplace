@@ -7,11 +7,6 @@
             <h1>Interviews</h1>
         </div>
         <div class="nav-right-side">
-            <ng-container *ngIf="!isAuthenticated;">
-              <p-button styleClass="nav-button" label="Log In" routerLink="/login"></p-button>
-              <p-button styleClass="nav-button" label="Sign Up" [outlined]="true" routerLink="/signup"></p-button>
-            </ng-container>
-            <!-- <p *ngIf="userEmail">Welcome {{ userEmail }}</p> -->
             <p-button styleClass="nav-button" label="Dashboard" routerLink="/dashboard"></p-button>
             <p-button [outlined]="true" (click)="logout()" routerLink="/login"><i class="pi pi-sign-out" style="font-size: 1.2rem"></i>Log Out</p-button>
         
