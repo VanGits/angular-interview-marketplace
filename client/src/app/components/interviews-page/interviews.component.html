@@ -7,8 +7,8 @@
             <p>{{ (interview.description?.length > 100) ? (interview.description | slice:0:100) + '...' : interview.description }}</p>
             <h4>Created by {{ interview.author }} </h4>
             <ng-template pTemplate="footer">
-                <p-button label="Preview" icon="pi pi-check" [outlined]="true"></p-button>
-                <p-button label="Purchase" icon="pi pi-credit-card"  [outlined]="true" styleClass="p-button" [style]="{ 'margin-left': '.5em', 'border-color': '#5dad4f', 'color':'#5dad4f' }"></p-button>
+                <!-- <p-button label="Preview" icon="pi pi-check" [outlined]="true"></p-button> -->
+                <p-button label="Unlock" icon="pi pi-unlock"  [outlined]="true" styleClass="p-button" [style]="{ 'margin-left': '.5em', 'border-color': '#5dad4f', 'color':'#5dad4f' }"></p-button>
             </ng-template>
         </p-card>
         

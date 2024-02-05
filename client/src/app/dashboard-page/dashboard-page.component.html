@@ -1,6 +1,7 @@
 <section>
     <div class="dashboard-content">
-        <p-button [style]="{'margin-top': '2em'}"><i class="pi pi-plus" style="font-size: 1rem"></i>Create New Interview</p-button>
+        <h1>Dashboard</h1>
+
         <div class="dashboard-charts">
             <div class="chart-container">
                 <p-card header="Balance">
@@ -19,12 +20,66 @@
                     <p-chart type="polarArea" [data]="data" [options]="options"></p-chart>
                 </p-card>
 
-                
+
             </div>
-            
+
+
 
         </div>
-       
+        <div class="create-interview">
+            <div class="create-options">
+                <h1>Create a new interview</h1>
+
+
+            </div>
+            <div class="create-interview-inputs">
+                <p-inputGroup>
+                    <p-inputGroupAddon>
+                        <i class="pi pi-pencil"></i>
+                    </p-inputGroupAddon>
+                    <input pInputText placeholder="Title" />
+                </p-inputGroup>
+
+                <p-inputGroup>
+                    <p-inputGroupAddon>$</p-inputGroupAddon>
+                    <input type="text" pInputText placeholder="Price" />
+                    <p-inputGroupAddon>.00</p-inputGroupAddon>
+                </p-inputGroup>
+
+                <span class="p-float-label">
+                    <textarea id="float-input" rows="5" cols="30" pInputTextarea></textarea>
+                    <label for="float-input">Description</label>
+                </span>
+
+
+            </div>
+            <div class="create-questions">
+                <div class="create-question-options">
+                    <h1>Setup questions</h1>
+                    <div class="slider-container">
+                        <input type="text" [(ngModel)]="value" pInputText class="slider" />
+                        <p-slider [(ngModel)]="value" class="slider"></p-slider>
+                    </div>
+
+                </div>
+                <div class="interview-questions">
+                    <ng-container *ngFor="let i of createRange(value)">
+                        <span class="p-float-label">
+                            <input pInputText [placeholder]="'Question ' + (i + 1)" />
+                            <label [for]="'question-input-' + i">Question {{ i + 1 }}</label>
+                        </span>
+                    </ng-container>
+                    <p-button><i class="pi pi-plus"></i>Create Interview</p-button>
+                </div>
+               
+
+            </div>
+
+
+
+
+        </div>
+
 
     </div>
 
