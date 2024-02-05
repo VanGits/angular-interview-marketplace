@@ -10,6 +10,7 @@ nav {
 nav i {
     color: var(--primary-color);
     font-size: 18px;
+   
 
 
 }
@@ -45,7 +46,22 @@ nav h1 {
 }
 
 p-button {
-    margin: 0 8px;
+    margin: 0 0.3rem;
 
 
+}
+.nav-right-side{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-right-side p{
+    color: var(--dark-color);
+    margin: 0 2rem;
+}
+.nav-right-side i{
+   
+    margin-right: 0.3rem;
+    cursor: pointer;
 }

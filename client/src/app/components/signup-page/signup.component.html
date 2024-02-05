@@ -1,1 +1,30 @@
-<p>signup works!</p>
+<section>
+    <div class="login-left-side">
+
+        <div class="login-content">
+            <div class="login-logo">
+                <i class="pi pi-pencil"></i>
+                <h1>Interviews</h1>
+            </div>
+            <h3>Email</h3>
+            <span class="p-float-label">
+
+                <input pInputText type="text" placeholder="Email" class="login-input" [(ngModel)]="email" />
+            </span>
+            <h3>Password</h3>
+            <span class="p-float-label">
+               
+                <input pInputText type="password" placeholder="Password" class="login-input" [(ngModel)]="password" />
+            </span>
+
+            <p-button (click) = "signup()" [outlined] = "true"styleClass="nav-button" label="Register"  [style]="{'margin-top': '2em'}"></p-button>
+            <p-button label="Already have an account?" [link]="true" routerLink="/login"></p-button>
+        </div>
+
+
+    </div>
+    <div class="login-right-side">
+        <img src="../../../assets/signup-banner.jpg" alt="banner">
+    </div>
+
+</section>

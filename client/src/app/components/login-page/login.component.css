@@ -41,3 +41,23 @@ section h3{
 .login-input{
     width: 300px;
 }
+.login-logo {
+    display: flex;
+    align-items: center;
+   
+    margin-bottom: 12px;
+}
+.login-logo h1{
+    font-family: 'Lato';
+    letter-spacing: 2.4px;
+    font-weight: 800;
+    margin-left: 12px;
+    font-size: 24px;
+    color: var(--dark-color);
+}
+.login-logo i {
+    color: var(--primary-color);
+    font-size: 18px;
+
+
+}

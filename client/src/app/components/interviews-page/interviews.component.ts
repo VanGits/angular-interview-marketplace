@@ -27,7 +27,7 @@ export class InterviewsComponent {
   ngOnInit() {
     this.fetchData().subscribe(response => {
       this.data = response;
-      console.log(this.data, "datatatatataATATA")
+      
     });
   }
 }

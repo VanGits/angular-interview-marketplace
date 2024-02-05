@@ -1,6 +1,11 @@
 <section>
     <div class="login-left-side">
+
         <div class="login-content">
+            <div class="login-logo">
+                <i class="pi pi-pencil"></i>
+                <h1>Interviews</h1>
+            </div>
             <h3>Email</h3>
             <span class="p-float-label">
 
@@ -11,7 +16,7 @@
 
                 <input pInputText type="password" placeholder="Password" class="login-input" [(ngModel)]="password" />
             </span>
-            <p-button styleClass="nav-button" label="Sign In" [style]="{'margin-top': '2em'}"></p-button>
+            <p-button [outlined] = "true" styleClass="nav-button" label="Sign In" (click)="login()" [style]="{'margin-top': '2em'}"></p-button>
             <p-button label="Don't have an account?" [link]="true" routerLink="/signup"></p-button>
         </div>
 
