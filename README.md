@@ -60,4 +60,10 @@ Follow these instructions to get a copy of the project up and running on your lo
    ng serve
    ```
 
+## Stripe Card Information
+
+When initiating the interview access process, you will encounter a prompt to complete the payment transaction through Stripe. Please use the following test card for this purpose: "4242 4242 4242 4242" as it is designed for testing within the environment.
+
+Other than that, you can put anything in the input fields.
+
 
