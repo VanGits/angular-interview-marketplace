@@ -19,7 +19,7 @@ section{
    
 }
 .dashboard-charts-wrapper{
-    background-color: var(--primary-color);
+    background: linear-gradient(to bottom, #7254f3, #7b60f4, #8c74f8 );
     width: 100%;
     padding: 4rem;
    

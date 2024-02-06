@@ -2,19 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { AccordionModule } from 'primeng/accordion';
+import { DividerModule } from 'primeng/divider';
+import { Stripe, loadStripe } from '@stripe/stripe-js';
+
+
 
 @Component({
   selector: 'app-interview',
   templateUrl: './interview.component.html',
-  styleUrl: "./interview.component.css",
-  imports: [CommonModule, AccordionModule],
-  standalone:true,
+  styleUrls: ['./interview.component.css'],
+  imports: [ CommonModule, DividerModule],
+  standalone: true,
 })
 export class InterviewComponent implements OnInit {
   interviewId: string | null = null;
-  interviewData: any; 
-  
+  interviewData: any;
   
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
@@ -22,8 +24,7 @@ export class InterviewComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.interviewId = params.get('interviewId');
-      
-      
+
       if (this.interviewId) {
         this.fetchInterviewData(this.interviewId);
       }
@@ -36,12 +37,43 @@ export class InterviewComponent implements OnInit {
     this.http.get(apiUrl).subscribe(
       (data) => {
         this.interviewData = data;
-        console.log('Interview Data:', data);
+        
       },
       (error) => {
         console.error('Error fetching interview data:', error);
-        
       }
     );
   }
+  userHasPurchasedInterview = false; 
+  isLockDisplayed(): boolean {
+  
+ 
+    return this.userHasPurchasedInterview; 
+  }
+  async handleUnlockClick() {
+    console.log("fired")
+    const stripe: Stripe | null = await loadStripe('pk_test_51OgnsVHAvC3FpqaVGOZaKkONZPe1OavWbVCiQuGFYbtTT2pKx3FFNeB8vWjKqAxot24aq1xgqeixKkw2psWgSE5i00yJMcE2Ej');
+
+    if (!stripe) {
+      console.error('Stripe has not loaded correctly.');
+      return;
+    }
+
+   
+    const response = await this.http
+      .post('http://localhost:3000/create-checkout-session', { interviewId: this.interviewId })
+      .toPromise();
+
+    const session = response as { sessionId: string };
+
+   
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.sessionId,
+    });
+
+    if (result.error) {
+      console.log(result.error.message);
+    }
+  }
+  
 }

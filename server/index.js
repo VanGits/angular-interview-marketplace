@@ -1,20 +1,16 @@
 const express = require('express');
 const cors = require('cors');
-// require('dotenv').config({ path: "./.env" });
+require('dotenv').config({ path: "./.env" });
 const { initializeApp } = require("firebase/app")
 const { getDatabase, ref, push, set, child, get  } = require("firebase/database");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } = require("firebase/auth");
-
-// var admin = require("firebase-admin");
-// var serviceAccount = require("./keys/serviceAccountKey.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://interview-marketplace-c1e0f-default-rtdb.firebaseio.com"
-// });
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
+ 
+// ------------ INITIALIZE FIREBASE APP  ------------
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3j2TJRCG4Lf1Ux7nzVBRCL8BXIUGZRTY",
@@ -26,14 +22,14 @@ const firebaseConfig = {
   appId: "1:485022054230:web:68830b0271d173677548f7",
   measurementId: "G-G983G0FXJN"
  };
- 
-// Initialize firebase app
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getDatabase();
 const auth = getAuth(firebaseApp);
 
 app.use(express.json());
+
+
 
 app.use(async (req, res, next) => {
   try {
@@ -52,8 +48,6 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Routes
-
 
 // ------------ AUTH  ------------
 
@@ -65,9 +59,9 @@ app.post('/register', async (req, res) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-   
+    
     const userRef = ref(db, `users/${user.uid}`);
-    await set(userRef, { email: user.email, balance: 0 });
+    await set(userRef, { email: user.email, balance: 0, paidInterviews: [] });
 
     res.status(201).json({ uid: user.uid, email: user.email });
   } catch (error) {
@@ -91,22 +85,21 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// ------------ AUTH  ------------
+// ------------ GET USER INFORMATION  ------------
 
-// Fetch user information and interviews for the currently authenticated user
+
 app.get('/user-info', async (req, res) => {
   try {
     if (req.user) {
       const userId = req.user.uid;
 
-     
       const userRef = ref(db, `users/${userId}`);
       const userSnapshot = await get(userRef);
 
       if (userSnapshot.exists()) {
         const userBalance = userSnapshot.val().balance;
+        const paidInterviews = userSnapshot.val().paidInterviews || [];
 
-       
         const userInterviewsRef = ref(db, `users/${userId}/interviews`);
         const userInterviewsSnapshot = await get(userInterviewsRef);
 
@@ -116,28 +109,27 @@ app.get('/user-info', async (req, res) => {
             userInterviews.push(childSnapshot.val());
           });
 
-         
           const userInfo = {
             uid: req.user.uid,
             email: req.user.email,
             balance: userBalance,
+            paidInterviews: paidInterviews,
             interviews: userInterviews,
           };
 
           res.status(200).json(userInfo);
         } else {
-         
           const userInfo = {
             uid: req.user.uid,
             email: req.user.email,
             balance: userBalance,
+            paidInterviews: paidInterviews,
             interviews: [],
           };
 
           res.status(200).json(userInfo);
         }
       } else {
-       
         res.status(404).json({ error: 'User not found' });
       }
     } else {
@@ -149,7 +141,7 @@ app.get('/user-info', async (req, res) => {
   }
 });
 
-
+// ------------ HANDLE INTERVIEWS  ------------
 
 // Fetch all interviews
 app.get('/interviews', async (req, res) => {
@@ -216,6 +208,54 @@ app.post('/interviews', async (req, res) => {
   }
  });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+
+ // ------------------------ HANDLE PAYMENT WITH STRIPE ------------------------
+
+app.post('/create-checkout-session', async (req, res) => {
+  const { interviewId } = req.body;
+
+  try {
+    const interviewRef = ref(db, `interviews/${interviewId}`);
+    const interviewSnapshot = await get(interviewRef);
+
+    if (!interviewSnapshot.exists()) {
+      return res.status(404).send('Interview not found');
+    }
+
+    const interviewData = interviewSnapshot.val();
+
+   
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: interviewData.title,
+          },
+          unit_amount: interviewData.price *  100, 
+        },
+        quantity:  1,
+      }],
+      mode: 'payment',
+      success_url: `${req.headers.origin}/`,
+      cancel_url: `${req.headers.origin}/`,
+    });
+
+    
+    const userId = req.user.uid;
+    const userPaidInterviewsRef = ref(db, `users/${userId}/paidInterviews`);
+    const userPaidInterviewsSnapshot = await get(userPaidInterviewsRef);
+    const paidInterviews = userPaidInterviewsSnapshot.val() || [];
+
+    if (!paidInterviews.includes(interviewId)) {
+      paidInterviews.push(interviewId);
+      await set(userPaidInterviewsRef, paidInterviews);
+    }
+
+    res.json({ sessionId: session.id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 });
