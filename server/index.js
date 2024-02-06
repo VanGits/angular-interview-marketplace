@@ -211,7 +211,7 @@ app.post('/interviews', async (req, res) => {
 
  // ------------------------ HANDLE PAYMENT WITH STRIPE ------------------------
 
-app.post('/create-checkout-session', async (req, res) => {
+ app.post('/create-checkout-session', async (req, res) => {
   const { interviewId } = req.body;
 
   try {
@@ -224,7 +224,6 @@ app.post('/create-checkout-session', async (req, res) => {
 
     const interviewData = interviewSnapshot.val();
 
-   
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
@@ -242,7 +241,6 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: `${req.headers.origin}/`,
     });
 
-    
     const userId = req.user.uid;
     const userPaidInterviewsRef = ref(db, `users/${userId}/paidInterviews`);
     const userPaidInterviewsSnapshot = await get(userPaidInterviewsRef);
@@ -253,7 +251,27 @@ app.post('/create-checkout-session', async (req, res) => {
       await set(userPaidInterviewsRef, paidInterviews);
     }
 
-    res.json({ sessionId: session.id });
+   
+    const userRef = ref(db, `users/${userId}`);
+    const userSnapshot = await get(userRef);
+
+    if (userSnapshot.exists()) {
+      const updatedUserInfo = {
+        uid: req.user.uid,
+        email: req.user.email,
+        balance: userSnapshot.val().balance,
+        paidInterviews: paidInterviews,
+        interviews: userSnapshot.val().interviews || [],
+      };
+
+     
+      res.json({
+        sessionId: session.id,
+        updatedUserInfo: updatedUserInfo,
+      });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

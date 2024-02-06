@@ -1,62 +1,58 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-   providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-   public userInfoSubject = new BehaviorSubject<any>(null);
-   public userInfo$ = this.userInfoSubject.asObservable();
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  public userInfoSubject = new BehaviorSubject<any>(null);
+  public userInfo$ = this.userInfoSubject.asObservable();
 
-   constructor(private http: HttpClient) {
-      this.checkAuthenticationStatus();
-      this.initializeUserInfoFromSession()
-    }
+  constructor(private http: HttpClient) {
+    this.checkAuthenticationStatus();
+    this.initializeUserInfoFromSession();
+  }
 
-    login(sessionToken: string): void {
-      this.fetchUserInfo();
-      this.isAuthenticatedSubject.next(true);
-      
-  
-    }
-    
-  
-
-   logout(): void {
-
-      sessionStorage.removeItem('userInfo');
-      this.isAuthenticatedSubject.next(false);
-   }
-
-   checkAuthenticationStatus(): boolean {
-      return !!sessionStorage.getItem('userInfo');
-   }
-
-   private fetchUserInfo(): void {
-      // Make an HTTP GET request to the backend's /user-info endpoint
-      this.http.get<any>('http://localhost:3000/user-info').subscribe(
-        (userInfoFromBackend) => {
-          // Update the userInfoSubject with the received data
-          console.log(userInfoFromBackend)
-          sessionStorage.setItem('userInfo', JSON.stringify(userInfoFromBackend))
-          this.userInfoSubject.next(userInfoFromBackend);
-        },
-        (error) => {
-          console.error('Error fetching user info:', error);
-        }
-      );
-    }
-    private initializeUserInfoFromSession(): void {
-      const userInfoStr = sessionStorage.getItem('userInfo');
-      if (userInfoStr) {
-         this.userInfoSubject.next(JSON.parse(userInfoStr));
-      } else {
-         this.userInfoSubject.next(null);
+  login(userInfo: string): void {
+    this.fetchUserInfo().subscribe(
+      (userInfoFromBackend) => {
+        this.newSession(userInfoFromBackend);
+        this.isAuthenticatedSubject.next(true);
+      },
+      (error) => {
+        console.error('Error fetching user info:', error);
       }
-     }
-}
+    );
+  }
 
-      
+  newSession(userInfo: any): void {
+    sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+    this.userInfoSubject.next(userInfo);
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('userInfo');
+    this.isAuthenticatedSubject.next(false);
+  }
+
+  checkAuthenticationStatus(): boolean {
+    return !!sessionStorage.getItem('userInfo');
+  }
+
+  private fetchUserInfo(): Observable<any> {
+    
+    return this.http.get<any>('http://localhost:3000/user-info');
+  }
+
+  private initializeUserInfoFromSession(): void {
+    const userInfoStr = sessionStorage.getItem('userInfo');
+    if (userInfoStr) {
+      this.userInfoSubject.next(JSON.parse(userInfoStr));
+    } else {
+      this.userInfoSubject.next(null);
+    }
+  }
+}

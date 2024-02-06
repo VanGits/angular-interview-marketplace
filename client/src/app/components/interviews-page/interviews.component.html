@@ -19,7 +19,6 @@
                     interview.description }}</p>
                 <h4>Created by {{ interview.author }} </h4>
                 <ng-template pTemplate="footer">
-                    <!-- <p-button label="Preview" icon="pi pi-check" [outlined]="true"></p-button> -->
                     <p-button label="View" icon="pi pi-eye"  styleClass="p-button"
                         [style]="{ 'margin-left': '.5em'}"
                         (onClick)="unlockInterview(interview.id)"></p-button>

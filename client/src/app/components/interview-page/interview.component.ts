@@ -4,22 +4,24 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { DividerModule } from 'primeng/divider';
 import { Stripe, loadStripe } from '@stripe/stripe-js';
-
-
+import { AuthService } from '../../services/authService';
 
 @Component({
   selector: 'app-interview',
   templateUrl: './interview.component.html',
   styleUrls: ['./interview.component.css'],
-  imports: [ CommonModule, DividerModule],
+  imports: [CommonModule, DividerModule],
   standalone: true,
 })
 export class InterviewComponent implements OnInit {
   interviewId: string | null = null;
   interviewData: any;
-  
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -37,7 +39,6 @@ export class InterviewComponent implements OnInit {
     this.http.get(apiUrl).subscribe(
       (data) => {
         this.interviewData = data;
-        
       },
       (error) => {
         console.error('Error fetching interview data:', error);
@@ -47,35 +48,47 @@ export class InterviewComponent implements OnInit {
 
   isLockDisplayed(): boolean {
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-    return userInfo?.paidInterviews?.includes(this.interviewData.id)
- 
-    
+    return userInfo?.paidInterviews?.includes(this.interviewData.id);
   }
-  async handleUnlockClick() {
-    const stripe: Stripe | null = await loadStripe('pk_test_51OgnsVHAvC3FpqaVGOZaKkONZPe1OavWbVCiQuGFYbtTT2pKx3FFNeB8vWjKqAxot24aq1xgqeixKkw2psWgSE5i00yJMcE2Ej');
 
+  async handleUnlockClick() {
+    const stripe: Stripe | null = await loadStripe(
+      'pk_test_51OgnsVHAvC3FpqaVGOZaKkONZPe1OavWbVCiQuGFYbtTT2pKx3FFNeB8vWjKqAxot24aq1xgqeixKkw2psWgSE5i00yJMcE2Ej'
+    );
+  
     if (!stripe) {
       console.error('Stripe has not loaded correctly.');
       return;
     }
+  
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
     const uid = userInfo.uid;
-    
-    const response = await this.http
-      .post('http://localhost:3000/create-checkout-session', {
-        interviewId: this.interviewId,
-        uid: uid, 
-      })
-      .toPromise();
-
-    const session = response as { sessionId: string };
-
-    const result = await stripe.redirectToCheckout({
-      sessionId: session.sessionId,
-    });
-
-    if (result.error) {
-      console.log(result.error.message);
+  
+    try {
+      const response = await this.http
+        .post('http://localhost:3000/create-checkout-session', {
+          interviewId: this.interviewId,
+          uid: uid,
+        })
+        .toPromise();
+  
+      const session = response as { sessionId: string, updatedUserInfo: any };
+  
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.sessionId,
+      });
+  
+      if (result.error) {
+        console.log(result.error.message);
+      } else {
+        if (session.updatedUserInfo) {
+          console.log('Updated User Info:', session.updatedUserInfo);
+          this.authService.newSession(session.updatedUserInfo);
+          this.authService.login(userInfo);
+        }
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
     }
   }
   
