@@ -111,3 +111,8 @@ textarea{
     margin-top: 2rem;
     align-self: flex-start;
 }
+p-messages{
+    position: fixed;
+    right: 0;
+    top: 0;
+}

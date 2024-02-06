@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavComponent } from './components/general/nav/nav.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/authService';
+
 
 
 
@@ -14,9 +15,11 @@ import { AuthService } from './services/authService';
   imports: [RouterOutlet, NavComponent, CommonModule],
   template: `
   <app-nav *ngIf="showNav"></app-nav>
+  
   <router-outlet></router-outlet>
     `,
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppComponent {
   title = 'Interview Marketplace';
