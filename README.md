@@ -6,7 +6,7 @@ Welcome! This is A 72 hour full-stack application challenge I have made using th
 
 ## Features
 
-- **Interview Packages:** Browse and purchase interview packages tailored for specific job roles, each including a curated set of interview questions, descriptions, and pricing information.
+- **Interview Series:** Browse and purchase interview packages tailored for specific job roles, each including a curated set of interview questions, descriptions, and pricing information.
 
 - **User Authentication:** Securely sign up, log in, and manage your profile to create new interview series.
 
