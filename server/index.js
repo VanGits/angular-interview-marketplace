@@ -174,6 +174,27 @@ app.get('/interviews', async (req, res) => {
  }
 });
 
+// Fetch a specific interview by its ID
+app.get('/interviews/:interviewId', async (req, res) => {
+  try {
+    const interviewId = req.params.interviewId;
+
+    // Retrieve the specific interview from the database
+    const interviewRef = ref(db, `interviews/${interviewId}`);
+    const interviewSnapshot = await get(interviewRef);
+
+    if (interviewSnapshot.exists()) {
+      const interviewData = interviewSnapshot.val();
+      res.status(200).json(interviewData);
+    } else {
+      res.status(404).json({ message: 'Interview not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
+});
+
 
 // Create a new interview
 app.post('/interviews', async (req, res) => {

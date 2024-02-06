@@ -1,35 +1,36 @@
 <main>
-    <div class="banner-wrapper"> 
+    <div class="banner-wrapper">
         <h1>The best place to buy interview series.</h1>
         <img src="../../../assets/illustration.svg" alt="main-banner">
-       
+
     </div>
-    
 
 
-   
+
+
     <div class="interview-wrapper">
         <h1>Available Series</h1>
         <div class="interviews">
 
             <p-card *ngFor="let interview of data" class="interview" [header]="interview.title"
                 [subheader]="'$' + (interview.price | number:'1.2-2')" [style]="{ width: '360px', minheight: '300px' }">
-    
+
                 <p>{{ (interview.description?.length > 100) ? (interview.description | slice:0:100) + '...' :
                     interview.description }}</p>
                 <h4>Created by {{ interview.author }} </h4>
                 <ng-template pTemplate="footer">
                     <!-- <p-button label="Preview" icon="pi pi-check" [outlined]="true"></p-button> -->
                     <p-button label="Unlock" icon="pi pi-unlock" [outlined]="true" styleClass="p-button"
-                        [style]="{ 'margin-left': '.5em', 'border-color': '#5dad4f', 'color':'#5dad4f' }"></p-button>
+                        [style]="{ 'margin-left': '.5em', 'border-color': '#5dad4f', 'color':'#5dad4f' }"
+                        (onClick)="unlockInterview(interview.id)"></p-button>
                 </ng-template>
             </p-card>
-    
-    
+
+
         </div>
 
     </div>
 
-    
+
 
 </main>

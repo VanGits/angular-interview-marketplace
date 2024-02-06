@@ -10,7 +10,7 @@ main{
     
 }
 main h1{
-    color: var(--dark-color);
+    color: var(--primary-color);
 }
 
 

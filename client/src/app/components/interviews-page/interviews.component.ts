@@ -4,19 +4,21 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
+import { PanelModule } from 'primeng/panel';
 
 
 
 @Component({
   selector: 'app-interviews',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule],
+  imports: [CommonModule, CardModule, ButtonModule, PanelModule],
   templateUrl: './interviews.component.html',
   styleUrl: './interviews.component.css',
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class InterviewsComponent {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
 
   }
   fetchData(): Observable<any> {
@@ -29,5 +31,10 @@ export class InterviewsComponent {
       this.data = response;
       
     });
+  }
+  unlockInterview(interviewId: string) {
+   
+    this.router.navigate(['/interview', interviewId]);
+   
   }
 }
