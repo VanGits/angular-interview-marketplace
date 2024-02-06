@@ -17,7 +17,7 @@
                 <input pInputText type="password" placeholder="Password" class="login-input" [(ngModel)]="password" />
             </span>
 
-            <p-button (click) = "signup()" [outlined] = "true"styleClass="nav-button" label="Register"  [style]="{'margin-top': '2em'}"></p-button>
+            <p-button [loading]="loading"(click) = "signup()" [outlined] = "true"styleClass="nav-button" label="Register"  [style]="{'margin-top': '2em'}"></p-button>
             <p-button label="Already have an account?" [link]="true" routerLink="/login"></p-button>
         </div>
 

@@ -5,7 +5,8 @@ const { initializeApp } = require("firebase/app")
 const { getDatabase, ref, push, set, child, get  } = require("firebase/database");
 const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } = require("firebase/auth");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.STRIPE_SECRET_KEY
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
@@ -33,11 +34,7 @@ app.use(express.json());
 
 app.use(async (req, res, next) => {
   try {
-    const user = await new Promise((resolve) => {
-      onAuthStateChanged(auth, (user) => {
-        resolve(user);
-      });
-    });
+    const user = auth.currentUser;
 
     req.user = user;
     console.log(req.user);
@@ -59,11 +56,12 @@ app.post('/register', async (req, res) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    
     const userRef = ref(db, `users/${user.uid}`);
     await set(userRef, { email: user.email, balance: 0, paidInterviews: [] });
 
-    res.status(201).json({ uid: user.uid, email: user.email });
+    const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET);
+
+    res.status(201).json({ token, uid: user.uid, email: user.email });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error });
@@ -76,14 +74,16 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    res.status(200).json({ uid: user.uid, email: user.email });
 
+    const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET);
+
+    res.status(200).json({ token, uid: user.uid, email: user.email });
   } catch (error) {
     console.error(error);
     res.status(401).json({ error: 'Login failed' });
-    
   }
 });
+
 
 // ------------ GET USER INFORMATION  ------------
 
@@ -171,7 +171,7 @@ app.get('/interviews/:interviewId', async (req, res) => {
   try {
     const interviewId = req.params.interviewId;
 
-    // Retrieve the specific interview from the database
+   
     const interviewRef = ref(db, `interviews/${interviewId}`);
     const interviewSnapshot = await get(interviewRef);
 
@@ -193,11 +193,11 @@ app.post('/interviews', async (req, res) => {
   try {
       const { userId, title, author, price, questions, description } = req.body;
 
-      // Save interview under user's interviews
+     
       const newInterviewRef = push(child(ref(db), `users/${userId}/interviews`));
       set(newInterviewRef, { id: newInterviewRef.key, title, author, price, questions, description })
 
-      // Save interview in overall interviews array
+     
       const newOverallInterviewRef = push(child(ref(db), '/interviews'));
       set(newOverallInterviewRef, { id: newOverallInterviewRef.key, title, author, price, questions, description });
 
@@ -245,7 +245,7 @@ app.post('/interviews', async (req, res) => {
     const userPaidInterviewsRef = ref(db, `users/${userId}/paidInterviews`);
     const userPaidInterviewsSnapshot = await get(userPaidInterviewsRef);
     const paidInterviews = userPaidInterviewsSnapshot.val() || [];
-
+    
     if (!paidInterviews.includes(interviewId)) {
       paidInterviews.push(interviewId);
       await set(userPaidInterviewsRef, paidInterviews);
@@ -278,6 +278,25 @@ app.post('/interviews', async (req, res) => {
   }
 });
 
+// Middleware to check JWT authentication
+app.use(async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+   
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
  // -----------------------------
  
 app.listen(PORT, () => {

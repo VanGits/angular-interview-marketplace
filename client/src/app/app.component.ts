@@ -28,17 +28,20 @@ export class AppComponent {
   title = 'Interview Marketplace';
   // Don't show general components on log in and sign up page
   showGeneral = true;
-  constructor(private authService: AuthService, private router: Router) { }
+
+  constructor(private authService: AuthService, private router: Router) {}
+
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.showGeneral = !['/login', '/signup'].includes(event.urlAfterRedirects);
+        this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
+          this.showGeneral = isAuthenticated && !['/login', '/signup'].includes(event.urlAfterRedirects);
+
+          if (!isAuthenticated && !['/login', '/signup'].includes(event.urlAfterRedirects)) {
+            this.router.navigate(['/login']);
+          }
+        });
       }
     });
-    // Disable access to listings if there isn't a user
-    if (!this.authService.checkAuthenticationStatus()) {
-      this.router.navigate(['/login']);
-    }
-
   }
 }

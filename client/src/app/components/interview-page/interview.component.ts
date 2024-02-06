@@ -16,6 +16,7 @@ import { AuthService } from '../../services/authService';
 export class InterviewComponent implements OnInit {
   interviewId: string | null = null;
   interviewData: any;
+  isLocked: boolean = true; 
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +40,7 @@ export class InterviewComponent implements OnInit {
     this.http.get(apiUrl).subscribe(
       (data) => {
         this.interviewData = data;
+        this.checkLockStatus(); 
       },
       (error) => {
         console.error('Error fetching interview data:', error);
@@ -46,50 +48,41 @@ export class InterviewComponent implements OnInit {
     );
   }
 
-  isLockDisplayed(): boolean {
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-    return userInfo?.paidInterviews?.includes(this.interviewData.id);
+  checkLockStatus() {
+   
+    this.isLocked = !this.authService.isUserPaidForInterview(this.interviewData.id);
   }
 
   async handleUnlockClick() {
     const stripe: Stripe | null = await loadStripe(
       'pk_test_51OgnsVHAvC3FpqaVGOZaKkONZPe1OavWbVCiQuGFYbtTT2pKx3FFNeB8vWjKqAxot24aq1xgqeixKkw2psWgSE5i00yJMcE2Ej'
     );
-  
+
     if (!stripe) {
       console.error('Stripe has not loaded correctly.');
       return;
     }
-  
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
-    const uid = userInfo.uid;
-  
+
     try {
       const response = await this.http
         .post('http://localhost:3000/create-checkout-session', {
           interviewId: this.interviewId,
-          uid: uid,
+          uid: this.authService.getUserInfo()?.uid,
         })
         .toPromise();
-  
+
       const session = response as { sessionId: string, updatedUserInfo: any };
-  
+
       const result = await stripe.redirectToCheckout({
         sessionId: session.sessionId,
       });
-  
+
       if (result.error) {
         console.log(result.error.message);
-      } else {
-        if (session.updatedUserInfo) {
-          console.log('Updated User Info:', session.updatedUserInfo);
-          this.authService.newSession(session.updatedUserInfo);
-          this.authService.login(userInfo);
-        }
       }
     } catch (error) {
       console.error('Error during checkout:', error);
     }
   }
-  
+
 }

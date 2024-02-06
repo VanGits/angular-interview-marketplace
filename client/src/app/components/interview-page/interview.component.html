@@ -1,5 +1,5 @@
 <section *ngIf="interviewData">
-    <div class="lock" *ngIf="!isLockDisplayed()">
+    <div class="lock" *ngIf="isLocked">
         <div class="interview-unlock" (click)="handleUnlockClick()">
             <i class="pi pi-unlock"></i>
             <label for="Unlock">Purchase Interview to View</label>

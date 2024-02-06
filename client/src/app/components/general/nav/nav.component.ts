@@ -24,16 +24,9 @@ export class NavComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() {
-  
-    this.isAuthenticated = this.authService.checkAuthenticationStatus();
-    this.authService.userInfo$.subscribe((userInfo) => {
-      this.userEmail = userInfo?.email;
-    });
-  }
 
   logout() {
-    this.authService.logout(); 
+    this.authService.clearToken(); 
     this.router.navigate(['/login']); 
   }
  }
