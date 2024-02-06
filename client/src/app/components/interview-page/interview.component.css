@@ -1,5 +1,5 @@
 section {
-    height: 100vh;
+    
     margin-top: 70px;
     width: 100%;
     display: flex;
@@ -82,3 +82,33 @@ section {
     cursor: pointer;
   }
   
+
+  /* Media Queries */
+
+/* Small desktops */
+@media (min-width: 1000px) and (max-width: 1439px) {
+  .interview-container, .interview-typography{
+      max-width: 1100px;
+      padding-left: 1rem;
+      
+  }
+}
+
+/*  Landscape Tablets */
+@media (min-width: 768px) and (max-width: 999px) {
+  .interview-container, .interview-typography{
+    max-width: 750px;
+    padding-left: 1rem;
+    
+}
+
+}
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+  .interview-container, .interview-typography{
+    max-width: 600px;
+    padding-left: 1rem;
+    
+}
+}

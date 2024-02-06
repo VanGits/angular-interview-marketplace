@@ -13,7 +13,7 @@
         <div class="interviews">
 
             <p-card *ngFor="let interview of data" class="interview" [header]="interview.title"
-                [subheader]="'$' + (interview.price | number:'1.2-2')" [style]="{ width: '360px', height: '380px' }">
+                [subheader]="'$' + (interview.price | number:'1.2-2')" [style]="{ height: '380px' }">
 
                 <p >{{ (interview.description?.length > 100) ? (interview.description | slice:0:100) + '...' :
                     interview.description }}</p>

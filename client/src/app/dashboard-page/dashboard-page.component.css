@@ -3,7 +3,7 @@ section{
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
-    height: 105vh;
+    min-height: 200vh;
     margin-top: 70px;
     
 }
@@ -129,4 +129,91 @@ p-messages{
     right: 0;
     top: 0;
     z-index: 1000;
+}
+
+/* Media Queries */
+
+/* Small desktops */
+@media (min-width: 1000px) and (max-width: 1439px) {
+    .create-interview{
+        max-width: 1000px;
+    }
+}
+
+/*  Landscape Tablets */
+@media (min-width: 768px) and (max-width: 999px) {
+    .create-interview{
+        max-width: 750px;
+    }
+    .dashboard-charts{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+       
+    }
+    .chart-container, .circle {
+        width: 300px; 
+        height: 350px;
+        margin-right: 1rem;
+    }
+   
+}
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+    .create-interview{
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .dashboard-charts{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+       
+    }
+    h1{
+        text-align: center;
+    }
+    .chart-container, .circle {
+        width: 300px; 
+        height: 350px;
+        margin-right: 1rem;
+    }
+    .create-options{
+        justify-content: center;
+    }
+    .create-interview-inputs{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .create-question-options{
+       
+        justify-content: center;
+       
+    }
+    .create-questions{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .interview-questions p-button{
+       
+        align-self: center;
+    }
+    
+}
+/* Extra small devices (phones) */
+@media (max-width: 476px) {
+    textarea{
+        max-width: 400px;
+    }
+    .interview-questions input{
+        width: 300px;
+    }
 }

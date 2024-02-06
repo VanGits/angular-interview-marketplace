@@ -19,6 +19,7 @@ section h3{
     
     width: 100%;
     object-fit: cover;
+ 
   
 
 }
@@ -61,3 +62,17 @@ section h3{
 
 
 }
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+    .login-right-side{
+    
+        display: none;
+     
+      
+    
+    }
+
+}
+
+

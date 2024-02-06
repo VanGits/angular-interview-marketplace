@@ -3,6 +3,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavComponent } from './components/general/nav/nav.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/authService';
+import { FooterComponent } from './components/general/footer/footer.component';
 
 
 
@@ -13,24 +14,25 @@ import { AuthService } from './services/authService';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavComponent, CommonModule],
+  imports: [RouterOutlet, NavComponent, CommonModule, FooterComponent],
   template: `
-  <app-nav *ngIf="showNav"></app-nav>
+  <app-nav *ngIf="showGeneral"></app-nav>
   
   <router-outlet></router-outlet>
+  <app-footer *ngIf="showGeneral"></app-footer>
     `,
   styleUrl: './app.component.css',
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppComponent {
   title = 'Interview Marketplace';
-  // Don't show nav bar on log in and sign up page
-  showNav = true;
+  // Don't show general components on log in and sign up page
+  showGeneral = true;
   constructor(private authService: AuthService, private router: Router) { }
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.showNav = !['/login', '/signup'].includes(event.urlAfterRedirects);
+        this.showGeneral = !['/login', '/signup'].includes(event.urlAfterRedirects);
       }
     });
     // Disable access to listings if there isn't a user

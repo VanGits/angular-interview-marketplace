@@ -1,0 +1,19 @@
+footer{
+    height: 300px;
+    margin-top: auto;
+    
+    background-color: var(--footer-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-color);
+}
+
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+i{
+    margin-right: 1rem;
+}

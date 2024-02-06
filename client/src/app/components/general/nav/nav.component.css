@@ -73,3 +73,38 @@ p-button {
     margin-right: 0.3rem;
     cursor: pointer;
 }
+
+
+/* Media Queries */
+
+/* Small desktops */
+@media (min-width: 1000px) and (max-width: 1439px) {
+    .nav-container{
+        max-width: 1000px;
+    }
+}
+
+/*  Landscape Tablets */
+@media (min-width: 768px) and (max-width: 999px) {
+    .nav-container{
+        max-width: 750px;
+    }
+}
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+    .nav-container{
+        max-width: 600px;
+    }
+}
+
+/* Extra small devices (phones) */
+@media (max-width: 476px) {
+    .nav-container{
+        max-width: 300px;
+    }
+    nav h1{
+        font-size: 14px;
+    }
+    
+}

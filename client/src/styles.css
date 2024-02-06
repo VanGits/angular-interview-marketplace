@@ -8,6 +8,7 @@
     --dark-color: #043D75;
     --light-color: #fff;
     --gray-color: #686868;
+    --footer-color: #1b1b1b;
 }
 
 *{
@@ -24,5 +25,6 @@
 html,body{
     padding: 0;
     margin: 0;
+    height: 100%;
    
 }

@@ -29,10 +29,12 @@ main h1{
     
 }
 .interview{
-    margin: 12px 0;
+    margin-bottom: 8rem;
     
     width: 100%;
     height: 300px;  
+    width: 360px;
+    
     
     
 
@@ -74,6 +76,54 @@ main img{
     height: 500px;
     margin-top: 1rem;
    
+}
+
+/* Media Queries */
+
+/* Small desktops */
+@media (min-width: 1000px) and (max-width: 1439px) {
+    .interviews{
+        max-width: 1000px;
+        grid-template-columns: repeat(3, 1fr);
+        padding-left: 1rem;
+    }
+}
+/*  Landscape Tablets */
+@media (min-width: 768px) and (max-width: 999px) {
+    .interviews{
+        max-width: 750px;
+        grid-template-columns: repeat(2, 1fr);
+        padding-left: 1rem;
+    }
+    main img{
+        width: 750px;
+    }
+    
+}
+/* Small devices (phones) */
+@media (max-width: 767px) {
+    .interviews{
+        text-align: center;
+        max-width: 600px;
+        grid-template-columns: repeat(1, 1fr);
+        
+    }
+    h1{
+        text-align: center;
+    }
+    main img{
+        max-width: 650px;
+        width: 100%;
+    }
+  
+}
+/* Extra small devices (phones) */
+@media (max-width: 476px) {
+    main img{
+        max-width: 250px;
+        height: 300px;
+        width: 100%;
+    }
 }
 
 

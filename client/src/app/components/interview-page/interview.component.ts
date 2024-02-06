@@ -44,29 +44,32 @@ export class InterviewComponent implements OnInit {
       }
     );
   }
-  userHasPurchasedInterview = false; 
+
   isLockDisplayed(): boolean {
-  
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
+    return userInfo?.paidInterviews?.includes(this.interviewData.id)
  
-    return this.userHasPurchasedInterview; 
+    
   }
   async handleUnlockClick() {
-    console.log("fired")
     const stripe: Stripe | null = await loadStripe('pk_test_51OgnsVHAvC3FpqaVGOZaKkONZPe1OavWbVCiQuGFYbtTT2pKx3FFNeB8vWjKqAxot24aq1xgqeixKkw2psWgSE5i00yJMcE2Ej');
 
     if (!stripe) {
       console.error('Stripe has not loaded correctly.');
       return;
     }
-
-   
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo') || '{}');
+    const uid = userInfo.uid;
+    
     const response = await this.http
-      .post('http://localhost:3000/create-checkout-session', { interviewId: this.interviewId })
+      .post('http://localhost:3000/create-checkout-session', {
+        interviewId: this.interviewId,
+        uid: uid, 
+      })
       .toPromise();
 
     const session = response as { sessionId: string };
 
-   
     const result = await stripe.redirectToCheckout({
       sessionId: session.sessionId,
     });
