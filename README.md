@@ -49,7 +49,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 5. Open a new terminal, then navigate to the client directory:
    ```bash
-   cd client
+   cd interview-marketplace/client
    ```
 6. Install dependencies:
    ```bash
