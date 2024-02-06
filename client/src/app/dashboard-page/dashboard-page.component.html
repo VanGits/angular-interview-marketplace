@@ -1,33 +1,37 @@
 <section>
 
     <div class="dashboard-content">
+        <div class="dashboard-charts-wrapper">
+            <h1>Dashboard</h1>
 
-        <h1>Dashboard</h1>
+            <div class="dashboard-charts">
+                <div class="chart-container">
+                    <p-card header="Balance">
+                        <p-chart type="bar" [data]="data" [options]="options"></p-chart>
+                    </p-card>
+                </div>
+                <div class="chart-container">
+                    <p-card header="Created Interviews">
+                        <p-chart type="line" [data]="data" [options]="options"></p-chart>
+                    </p-card>
 
-        <div class="dashboard-charts">
-            <div class="chart-container">
-                <p-card header="Balance">
-                    <p-chart type="bar" [data]="data" [options]="options"></p-chart>
-                </p-card>
+
+                </div>
+                <div class="chart-container circle">
+                    <p-card header="Purchased Interviews">
+                        <p-chart type="polarArea" [data]="data" [options]="options"></p-chart>
+                    </p-card>
+
+
+                </div>
+
+
+
             </div>
-            <div class="chart-container">
-                <p-card header="Created Interviews">
-                    <p-chart type="line" [data]="data" [options]="options"></p-chart>
-                </p-card>
-
-
-            </div>
-            <div class="chart-container circle">
-                <p-card header="Purchased Interviews">
-                    <p-chart type="polarArea" [data]="data" [options]="options"></p-chart>
-                </p-card>
-
-
-            </div>
-
-
 
         </div>
+
+
         <form class="create-interview" [formGroup]="interviewForm">
             <div class="create-options">
                 <h1>Create a new interview</h1>
