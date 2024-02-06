@@ -4,6 +4,7 @@ section{
     justify-content: flex-start;
     flex-direction: column;
     height: 105vh;
+    margin-top: 70px;
     
 }
 .dashboard-content{
@@ -115,4 +116,5 @@ p-messages{
     position: fixed;
     right: 0;
     top: 0;
+    z-index: 1000;
 }

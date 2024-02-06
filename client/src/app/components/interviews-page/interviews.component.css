@@ -3,8 +3,14 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     width: 100%;
-    margin-top: 24px;
+    margin-top: 70px;
+    
+    
+}
+main h1{
+    color: var(--dark-color);
 }
 
 
@@ -16,6 +22,9 @@ main{
     align-items: center;
     width: 100%;
     gap: 10px;
+    max-width: 1500px;
+  
+    
     
     
 }
@@ -40,6 +49,33 @@ main{
     box-shadow: none;
     border-color: none;
    
-   }
-  
+}
+.banner-wrapper{
+    width: 100%;
+    
+    
+    position: relative;
+    height: 700px;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+   
+   
+}
+.banner-wrapper h1{
+    color: white;
+   
+}
+main img{
+    
+   object-fit: cover;
+    width: 1000px;
+    
+    height: 500px;
+    margin-top: 1rem;
+   
+}
+
 
